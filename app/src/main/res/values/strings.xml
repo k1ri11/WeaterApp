@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Weater app</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="degree">°</string>
+    <string name="openweathermap">openweathermap</string>
+    <string name="updated">Обновлено:</string>
+    <string name="choose_city">Выберите город</string>
+    <string name="add_city">Добавить город</string>
+    <string name="determinate_lacetion">Определить местоположение</string>
+</resources>
