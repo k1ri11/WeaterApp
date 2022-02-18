@@ -14,14 +14,15 @@ import com.example.weaterapp.MainActivity
 import com.example.weaterapp.R
 import com.example.weaterapp.WeatherViewModel
 import com.example.weaterapp.adapters.SearchAdapter
-import com.example.weaterapp.databinding.FragmentEditBinding
+import com.example.weaterapp.databinding.FragmentSearchBinding
+import com.example.weaterapp.models.City
 import com.example.weaterapp.modelsApi.Search.SearchResult
 import com.example.weaterapp.modelsApi.Search.SearchResultItem
 import java.util.ArrayList
 
 class SearchFragment : Fragment(), SearchView.OnQueryTextListener, SearchAdapter.OnItemClickListener {
 
-    private var _binding: FragmentEditBinding? = null
+    private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: WeatherViewModel
@@ -33,7 +34,7 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener, SearchAdapter
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEditBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
         viewModel = (activity as MainActivity).viewModel
@@ -47,11 +48,6 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener, SearchAdapter
         binding.searchRv.adapter = searchAdapter
         binding.searchRv.layoutManager = LinearLayoutManager(activity)
 //        binding.searchRv.setHasFixedSize(true)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -68,7 +64,7 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener, SearchAdapter
             viewModel.searchLocationByName(query)
             viewModel.searchResult.observe(viewLifecycleOwner) {
                 binding.progressBar.isVisible = true
-                searchAdapter.resultItems = it as ArrayList<SearchResultItem>
+                searchAdapter.resultItems = it
                 binding.progressBar.isVisible = false
             }
         }
@@ -82,12 +78,20 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener, SearchAdapter
     override fun onItemClick(position: Int) {
         val lat = viewModel.searchResult.value?.get(position)?.lat
         val lon = viewModel.searchResult.value?.get(position)?.lon
-        if (lat!= null && lon!= null){
+        val cityName = viewModel.searchResult.value?.get(position)?.name
+        if (lat!= null && lon!= null && cityName != null ){
             viewModel.getWeatherModel(lat = lat, lon = lon)
+            val city = City(null, cityName)
+            viewModel.addCity(city)
         }
         else{
             Toast.makeText(requireContext(), "Не удалось получить данные", Toast.LENGTH_LONG).show()
         }
         findNavController().navigate(R.id.action_editFragment_to_currentWeatherFragment)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

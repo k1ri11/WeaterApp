@@ -8,11 +8,15 @@ import android.net.NetworkCapabilities.*
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.weaterapp.database.CityDatabase
+import com.example.weaterapp.models.City
 import com.example.weaterapp.models.WeatherModel
 import com.example.weaterapp.modelsApi.Search.SearchResult
 import com.example.weaterapp.repository.Repository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -23,6 +27,7 @@ class WeatherViewModel(
 
     val weather: MutableLiveData<WeatherModel> = MutableLiveData()
     val searchResult: MutableLiveData<SearchResult> = MutableLiveData()
+    val allCities: LiveData<List<City>> = repository.allCities
 
     fun getWeatherModel(lat: Double, lon: Double) {
         viewModelScope.launch {
@@ -40,7 +45,7 @@ class WeatherViewModel(
         }
     }
 
-    fun searchLocationByName(query: String){
+    fun searchLocationByName(query: String) {
         viewModelScope.launch {
             if (hasInternetConnection()) {
                 val response = repository.searchLocationByName(query)
@@ -55,9 +60,9 @@ class WeatherViewModel(
         }
     }
 
-    private fun getCityNameAndCountry(lat: Double,lon: Double):String{
+    private fun getCityNameAndCountry(lat: Double, lon: Double): String {
         val geoCoder = Geocoder(getApplication<WeatherApplication>(), Locale.getDefault())
-        val adress = geoCoder.getFromLocation(lat,lon,3)
+        val adress = geoCoder.getFromLocation(lat, lon, 3)
         val cityName = adress[0].locality
         val countryName = adress[0].countryName
         Log.d("TAG", "getCityNameAndCountry: $cityName $countryName")
@@ -77,4 +82,17 @@ class WeatherViewModel(
             else -> false
         }
     }
+
+    fun addCity(city: City) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addCity(city)
+        }
+    }
+
+    fun deleteCity(city: City) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteCity(city)
+        }
+    }
+
 }

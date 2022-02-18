@@ -79,7 +79,7 @@ class CurrentWeatherFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.add_city -> findNavController().navigate(R.id.action_currentWeatherFragment_to_editFragment)
+            R.id.add_city -> findNavController().navigate(R.id.action_currentWeatherFragment_to_addCityFragment)
             R.id.location -> setWeatherWithCurrentLocation()
         }
         return true
