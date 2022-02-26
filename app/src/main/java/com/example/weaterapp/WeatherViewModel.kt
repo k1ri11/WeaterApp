@@ -11,7 +11,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.weaterapp.database.CityDatabase
 import com.example.weaterapp.models.City
 import com.example.weaterapp.models.WeatherModel
 import com.example.weaterapp.modelsApi.Search.SearchResult
@@ -89,10 +88,15 @@ class WeatherViewModel(
         }
     }
 
+    fun updateCities(new_cities :List<City>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateCities(new_cities)
+        }
+    }
+
     fun deleteCity(city: City) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteCity(city)
         }
     }
-
 }

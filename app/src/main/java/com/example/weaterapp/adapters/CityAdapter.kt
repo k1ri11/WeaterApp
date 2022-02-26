@@ -1,12 +1,15 @@
 package com.example.weaterapp.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weaterapp.databinding.CityItemBinding
 import com.example.weaterapp.models.City
 
-class CityAdapter: RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
+class CityAdapter(
+    private val listener: OnItemClickListener
+): RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
 
     var cityList: List<City> = emptyList()
     set(newValue) {
@@ -14,7 +17,19 @@ class CityAdapter: RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
         notifyDataSetChanged()
     }
 
-    inner class CityViewHolder( val binding: CityItemBinding): RecyclerView.ViewHolder(binding.root){}
+    interface OnItemClickListener{
+        fun onItemClick(position: Int)
+    }
+
+    inner class CityViewHolder( val binding: CityItemBinding): RecyclerView.ViewHolder(binding.root), View.OnClickListener{
+        init {
+            binding.root.setOnClickListener(this)
+        }
+
+        override fun onClick(p0: View?) {
+            listener.onItemClick(adapterPosition)
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
         val binding = CityItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

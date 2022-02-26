@@ -23,6 +23,10 @@ class Repository(private val cityDao: CityDao) {
         cityDao.addCity(city)
     }
 
+    suspend fun updateCities(new_cities: List<City>) {
+        cityDao.updateCities(new_cities)
+    }
+
     suspend fun deleteCity(city: City) {
         cityDao.deleteCity(city)
     }

@@ -1,26 +1,21 @@
 package com.example.weaterapp.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.weaterapp.MainActivity
 import com.example.weaterapp.R
 import com.example.weaterapp.WeatherViewModel
 import com.example.weaterapp.adapters.SearchAdapter
 import com.example.weaterapp.databinding.FragmentSearchBinding
 import com.example.weaterapp.models.City
-import com.example.weaterapp.modelsApi.Search.SearchResult
-import com.example.weaterapp.modelsApi.Search.SearchResultItem
-import java.util.ArrayList
 
-class SearchFragment : Fragment(), SearchView.OnQueryTextListener, SearchAdapter.OnItemClickListener {
+class SearchFragment : Fragment(), SearchView.OnQueryTextListener,
+    SearchAdapter.OnItemClickListener {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -40,7 +35,6 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener, SearchAdapter
         viewModel = (activity as MainActivity).viewModel
         setupRV()
         return view
-
     }
 
     private fun setupRV() {
@@ -76,17 +70,13 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener, SearchAdapter
     }
 
     override fun onItemClick(position: Int) {
-        val lat = viewModel.searchResult.value?.get(position)?.lat
-        val lon = viewModel.searchResult.value?.get(position)?.lon
-        val cityName = viewModel.searchResult.value?.get(position)?.name
-        if (lat!= null && lon!= null && cityName != null ){
-            viewModel.getWeatherModel(lat = lat, lon = lon)
-            val city = City(null, cityName)
-            viewModel.addCity(city)
-        }
-        else{
-            Toast.makeText(requireContext(), "Не удалось получить данные", Toast.LENGTH_LONG).show()
-        }
+        val currentItem = searchAdapter.resultItems[position]
+        val lat = currentItem.lat
+        val lon = currentItem.lon
+        val cityName = currentItem.name
+        viewModel.getWeatherModel(lat = lat, lon = lon)
+        val city = City(id = null, lat = lat, lon = lon, cityName = cityName)
+        viewModel.addCity(city)
         findNavController().navigate(R.id.action_editFragment_to_currentWeatherFragment)
     }
 

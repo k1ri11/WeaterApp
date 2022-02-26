@@ -11,22 +11,22 @@ class SearchAdapter(
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
-     var resultItems = emptyList<SearchResultItem>()
+    var resultItems = emptyList<SearchResultItem>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    interface OnItemClickListener{
-        fun onItemClick(position: Int){
+    interface OnItemClickListener {
+        fun onItemClick(position: Int) {
         }
     }
 
     inner class SearchViewHolder(val binding: SearchItemBinding) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener{
-            init {
-                binding.root.setOnClickListener(this)
-            }
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        init {
+            binding.root.setOnClickListener(this)
+        }
 
         override fun onClick(p0: View?) {
             listener.onItemClick(adapterPosition)
