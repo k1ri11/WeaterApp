@@ -27,7 +27,7 @@ class CityAdapter(
         }
 
         override fun onClick(p0: View?) {
-            listener.onItemClick(adapterPosition)
+            listener.onItemClick(bindingAdapterPosition)
         }
     }
 

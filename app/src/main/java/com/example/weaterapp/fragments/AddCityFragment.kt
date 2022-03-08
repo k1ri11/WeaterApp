@@ -47,8 +47,8 @@ class AddCityFragment : Fragment(), CityAdapter.OnItemClickListener {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                val startPosition = viewHolder.adapterPosition
-                val endPosition = target.adapterPosition
+                val startPosition = viewHolder.absoluteAdapterPosition
+                val endPosition = target.absoluteAdapterPosition
                 val oldCityId = cityAdapter.cityList[startPosition].id
                 val newCityId = cityAdapter.cityList[endPosition].id
                 cityAdapter.cityList[startPosition].id = newCityId
@@ -60,7 +60,7 @@ class AddCityFragment : Fragment(), CityAdapter.OnItemClickListener {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewModel.updateCities(cityAdapter.cityList)
-                val deletedCity = cityAdapter.cityList[viewHolder.adapterPosition]
+                val deletedCity = cityAdapter.cityList[viewHolder.absoluteAdapterPosition]
                 viewModel.deleteCity(deletedCity)
                 Snackbar.make(binding.cityRv, "deleted", Snackbar.LENGTH_LONG)
                     .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)

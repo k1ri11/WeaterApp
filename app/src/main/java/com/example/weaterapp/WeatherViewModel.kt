@@ -17,6 +17,7 @@ import com.example.weaterapp.modelsApi.Search.SearchResult
 import com.example.weaterapp.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class WeatherViewModel(
@@ -29,11 +30,13 @@ class WeatherViewModel(
     val allCities: LiveData<List<City>> = repository.allCities
 
     fun getWeatherModel(lat: Double, lon: Double) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (hasInternetConnection()) {
                 val response = repository.getWeatherModel(lat, lon).toWeatherModel()
                 response.location = getCityNameAndCountry(lat, lon)
-                weather.value = response
+                withContext(Dispatchers.Main) {
+                    weather.value = response
+                }
             } else {
                 Toast.makeText(
                     getApplication<WeatherApplication>(),
@@ -45,10 +48,12 @@ class WeatherViewModel(
     }
 
     fun searchLocationByName(query: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (hasInternetConnection()) {
                 val response = repository.searchLocationByName(query)
-                searchResult.value = response
+                withContext(Dispatchers.Main) {
+                    searchResult.value = response
+                }
             } else {
                 Toast.makeText(
                     getApplication<WeatherApplication>(),
@@ -88,7 +93,7 @@ class WeatherViewModel(
         }
     }
 
-    fun updateCities(new_cities :List<City>) {
+    fun updateCities(new_cities: List<City>) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateCities(new_cities)
         }

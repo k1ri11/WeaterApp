@@ -107,7 +107,6 @@ class CurrentWeatherFragment : Fragment() {
             fusedLocation = LocationServices.getFusedLocationProviderClient(this.requireContext())
             fusedLocation.lastLocation
                 .addOnSuccessListener {
-//                    Log.d("TAG", "getUserLocation: ${it.latitude} ${it.longitude}")
                     getAndSetWeather(it.latitude, it.longitude)
                 }
         } else {

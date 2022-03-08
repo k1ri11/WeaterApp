@@ -11,6 +11,10 @@
         android:label="fragment_current_weather"
         tools:layout="@layout/fragment_current_weather" >
         <action
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"
             android:id="@+id/action_currentWeatherFragment_to_addCityFragment"
             app:destination="@id/addCityFragment" />
     </fragment>
@@ -20,9 +24,12 @@
         android:label="fragment_edit"
         tools:layout="@layout/fragment_search" >
         <action
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
             android:id="@+id/action_editFragment_to_currentWeatherFragment"
             app:destination="@id/currentWeatherFragment"
-            app:launchSingleTop="false"
             app:popUpToInclusive="false" />
     </fragment>
     <fragment
@@ -31,9 +38,17 @@
         android:label="fragment_add_city"
         tools:layout="@layout/fragment_add_city" >
         <action
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"
             android:id="@+id/action_addCityFragment_to_editFragment"
             app:destination="@id/editFragment" />
         <action
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
             android:id="@+id/action_addCityFragment_to_currentWeatherFragment"
             app:destination="@id/currentWeatherFragment" />
     </fragment>
